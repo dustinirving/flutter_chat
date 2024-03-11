@@ -8,36 +8,49 @@ class SideNavigation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Capture the primary color in a variable for easier use
-    final primaryColor = Theme.of(context).colorScheme.primary;
-
-    // Returns an icon with the primary color if it's selected
-    Icon getIcon(IconData iconData, int index) {
+    // Returns an icon with the primary color if it's selected, otherwise outlined
+    Widget getIcon(IconData selectedIcon, IconData outlinedIcon, int index) {
+      final isSelected = selectedIndex == index;
       return Icon(
-        iconData,
-        // Apply the primary color only if the icon is selected
-        color: selectedIndex == index ? primaryColor : null,
+        isSelected ? selectedIcon : outlinedIcon,
+        color: isSelected ? Colors.white : Colors.grey.shade500,
+      );
+    }
+
+        // Custom label with conditional color
+    Widget getLabel(String text, int index) {
+      final isSelected = selectedIndex == index;
+      return Text(
+        text,
+        style: TextStyle(
+          color: isSelected ? Colors.white : Colors.grey.shade500, // Selected color : Unselected color
+        ),
       );
     }
 
     return NavigationRail(
       extended: false,
-      backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+      labelType: NavigationRailLabelType.all,
+      backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       destinations: [
         NavigationRailDestination(
-          icon: getIcon(Icons.person, 0),
-          label: Text('Profile'),
+          icon: getIcon(Icons.person, Icons.person_outline, 0),
+          label: getLabel('Profile', 0),
+          padding: EdgeInsets.all(15),
         ),
         NavigationRailDestination(
-          icon: getIcon(Icons.people, 1),
-          label: Text('Friends'),
+          icon: getIcon(Icons.people, Icons.people_outline, 1),
+          label: getLabel('Friends', 1),
+          padding: EdgeInsets.only(bottom: 15),
         ),
         NavigationRailDestination(
-          icon: getIcon(Icons.message, 2),
-          label: Text('Messages'),
+          icon: getIcon(Icons.message, Icons.message_outlined, 2),
+          label: getLabel('Messages', 2),
+          padding: EdgeInsets.only(bottom: 15),
         ),
       ],
       selectedIndex: selectedIndex,
+      indicatorColor: Colors.transparent,
       onDestinationSelected: (value) {
         onIndexSelected(value);
       },

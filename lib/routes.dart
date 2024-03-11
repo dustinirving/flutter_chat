@@ -1,5 +1,7 @@
-import 'package:flutter_chat/src/components/pages/home.dart';
-import 'package:flutter_chat/src/components/pages/login.dart';
+import 'package:auth0_flutter/auth0_flutter.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_chat/src/pages/login.dart';
+import 'package:flutter_chat/src/pages/home.dart';
 import 'package:go_router/go_router.dart';
 
 // GoRouter configuration
@@ -12,9 +14,12 @@ final routes = GoRouter(
         },
         routes: [
           GoRoute(
-            name: 'home',
             path: '/home',
-            builder: (context, state) => HomePage(),
+            builder: (BuildContext context, GoRouterState state) {
+              // Extract credentials passed through extra
+              final credentials = state.extra as Credentials?;
+              return HomePage(credentials: credentials);
+            },
           ),
           GoRoute(
             name: 'login',
